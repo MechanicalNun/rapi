@@ -114,7 +114,7 @@ def add_sin_to_global_data(sindata):
 def load_global_data():
     if not os.path.exists(SIN_FILENAME):
         return
-        
+
     with open(SIN_FILENAME) as sinsfile:
         for line in sinsfile:
             try:
@@ -243,4 +243,4 @@ def test():
 
 if __name__ == '__main__':
     load_global_data()
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)
