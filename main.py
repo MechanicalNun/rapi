@@ -89,6 +89,39 @@ def hsv2rgb(h, s, v):
 
 
 #------------------------------------------------------------------------------
+# some global state
+
+SIN_FILENAME = 'sins.json'
+
+from collections import defaultdict
+sins_per_neighborhood = defaultdict(int)
+sins_per_category = defaultdict(int)
+sins_per_sex = defaultdict(int)
+
+def add_sin_to_global_data(sindata):
+    neighborhood = sindata.get('neighborhood')
+    if neighborhood:
+        sins_per_neighborhood[neighborhood] += 1
+
+    sin_category = sindata.get('sin')
+    if sin_category:
+        sins_per_category[sin_category] += 1
+
+    sinner_sex = sindata.get('sex')
+    if sinner_sex:
+        sins_per_sex[sinner_sex] += 1
+
+def load_global_data():
+    with open(SIN_FILENAME) as sinsfile:
+        for line in sinsfile:
+            try:
+                data = json.loads(line.strip())
+                add_sin_to_global_data(data)
+            except Exception, e:
+                print 'Error parsing sin data:', e
+
+
+#------------------------------------------------------------------------------
 # flask app
 
 app = Flask(__name__)
@@ -169,11 +202,36 @@ def reportsin():
     print '*********************************************************************************'
     print data
 
+    add_sin_to_global_data(data)
+
     # note: not really json. each line is json but parsing the entire file as json will fail
-    with open('sins.json', 'a+b') as output:
+    with open(SIN_FILENAME, 'a+b') as output:
         output.write(json.dumps(data) + os.linesep)
     
     return ''    
+
+@app.route('/results')
+def results():
+    
+    result= {
+              "Parnassus Heights": {
+                "strokeColor": 'black',
+                "strokeOpacity": 0.9,
+                "strokeWeight": 0.9,
+                "fillColor": 'red',
+                "fillOpacity": 0.1
+                },
+              "Apparel City": {"fillOpacity": 0.9,"fillColor": '#009ACD'},
+              "Anza Vista": {"fillOpacity": 0.9,"fillColor": '#009ACD'},
+              "Mission Dolores": {"fillOpacity": 0.4, "fillColor": 'blue'},
+              "Dogpatch": {"fillOpacity": 0.9,"fillColor": '#009ACD', "strokeColor": "black" }, 
+              "Potrero Hill": {"fillOpacity": 0.9,"fillColor": '#009ACD', "strokeColor": "black" }
+            }
+            # "Parnassus Heights": {"fillOpacity": 0.9,"fillColor": '#00FF00'}, 
+            # "Apparel City": {"fillOpacity": 0.9,"fillColor": '#00FF00'}
+            # }
+    return render_template('merge_style_hoods.html', data = result)
+
 
 @app.route('/test')
 def test():
@@ -181,4 +239,5 @@ def test():
     return 'Test'
 
 if __name__ == '__main__':
+    load_global_data()
     app.run(host='0.0.0.0', port=5000, debug=True)
