@@ -112,6 +112,9 @@ def add_sin_to_global_data(sindata):
         sins_per_sex[sinner_sex] += 1
 
 def load_global_data():
+    if not os.path.exists(SIN_FILENAME):
+        return
+        
     with open(SIN_FILENAME) as sinsfile:
         for line in sinsfile:
             try:
