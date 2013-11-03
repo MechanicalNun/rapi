@@ -10,7 +10,7 @@ for (var neighborhood in hoodPolygons) {
 
     hoods[neighborhood] = {
         paths: paths,
-        "strokeColor": '#FF0000',
+        "strokeColor": '#ABABAB',
         "strokeOpacity": 0,
         "strokeWeight": 1,
         "fillColor": '#00FF00',

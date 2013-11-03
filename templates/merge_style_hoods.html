@@ -28,48 +28,40 @@ var MY_MAPTYPE_ID = 'custom_style';
 
 function initialize() {
 
-  var featureOpts = [
-    {
-      stylers: [
-        { hue: '#F0F8FF' },
-        { visibility: 'simplified' },
-        { gamma: 0.5 },
-        { weight: 0.5 }
-      ]
-    },
-    {
-      elementType: 'labels',
-      stylers: [
-        { visibility: 'off' }
-      ]
-    },
-    {
-      featureType: 'water',
-      stylers: [
-        { color: '#E0EEEE' }
-      ]
-    },{
-      featureType: "road",
-      elementType: "geometry",
-      stylers: [
-        { lightness: 100 },
-        { visibility: "off" }
-      ]
-    },
-    {
-    featureType: "administrative",
-    elementType: "labels",
-    stylers: [
-      { visibility: "on" }
+var featureOpts = [
+  {
+    "stylers": [
+      { "hue": "#005eff" },
+      { "saturation": -87 },
+      { "lightness": 26 },
+      { "gamma": 0.84 }
     ]
-    },{
-    featureType: "transit",
-    stylers: [
+  },{
+    "featureType": "transit",
+    "stylers": [
       { "visibility": "off" }
     ]
+  },{
+    "featureType": "road.highway",
+    "elementType": "labels",
+    "stylers": [
+      { "visibility": "off" }
+    ]
+  },{
+    "featureType": "poi",
+    "elementType": "labels",
+    "stylers": [
+      { "visibility": "off" }
+    ]
+  },{
+    "featureType": "water",
+    "stylers": [
+      { "lightness": 64 },
+      { "saturation": -95 }
+    ]
+  },{
   }
-    
-  ];
+];
 
   var mapOptions = {
     zoom: 13,
@@ -169,37 +161,9 @@ ul.ticker li {
 
     <div class="tickercontainer">
         <ul class="ticker">
-          <li>Ticker item 1</li>
-          <li>Ticker item 2</li>
-          <li>Ticker item 3</li>
-          <li>Ticker item 4</li>
-          <li>Ticker item 5</li>
-          <li>Ticker item 6</li>
-          <li>Ticker item 1</li>
-          <li>Ticker item 2</li>
-          <li>Ticker item 3</li>
-          <li>Ticker item 4</li>
-          <li>Ticker item 5</li>
-          <li>Ticker item 6</li>
-          <li>Ticker item 1</li>
-          <li>Ticker item 2</li>
-          <li>Ticker item 3</li>
-          <li>Ticker item 4</li>
-          <li>Ticker item 5</li>
-          <li>Ticker item 6</li>
-          <li>Ticker item 1</li>
-          <li>Ticker item 2</li>
-          <li>Ticker item 3</li>
-          <li>Ticker item 4</li>
-          <li>Ticker item 5</li>
-          <li>Ticker item 6</li>
-          <li>Ticker item 1</li>
-          <li>Ticker item 2</li>
-          <li>Ticker item 3</li>
-          <li>Ticker item 4</li>
-          <li>Ticker item 5</li>
-          <li>Ticker item 6</li>
-
+          {% for ti in ticker %}
+          <li>{{ti}}</li>
+          {% endfor %}
         </ul>
     </div>
 

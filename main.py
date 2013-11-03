@@ -3,6 +3,8 @@ import serial
 from struct import pack
 import json, os, datetime
 import geo
+import string
+import random
 
 #------------------------------------------------------------------------------
 # try connecting to the arduino, fail gracefully
@@ -96,9 +98,40 @@ SIN_FILENAME = 'sins.json'
 from collections import defaultdict
 sins_per_neighborhood = defaultdict(int)
 sins_per_category = defaultdict(int)
+sins_per_sin = defaultdict(int)
 sins_per_sex = defaultdict(int)
+total_sins = 0
+
+sins_per_neighborhood.update({
+    'Mission District' : 115,
+    'South Beach' : 4,
+    'Potrero Hill' : 37,
+    'North Beach' : 96,
+    'Mission Bay' : 13,
+    'Inner Richmond' : 1,
+    'Excelsior' : 107,
+    'Bayview / Hunter\'s Point' : 3,
+})
+
+sins_per_category.update({
+    'envy' : 45,
+    'gluttony' : 54,
+    'greed' : 45,
+    'lust' : 67,
+    'pride' : 34,
+    'sloth' : 49,
+    'wrath' : 78,
+})
+
+sins_per_sex.update({
+    'female' : 104,
+    'male' : 280,
+})
 
 def add_sin_to_global_data(sindata):
+
+    global total_sins
+
     neighborhood = sindata.get('neighborhood')
     if neighborhood:
         sins_per_neighborhood[neighborhood] += 1
@@ -107,9 +140,15 @@ def add_sin_to_global_data(sindata):
     if sin_category:
         sins_per_category[sin_category] += 1
 
+    sin = sindata.get('sub_sin')
+    if sin:
+        sins_per_sin[sin] += 1
+
     sinner_sex = sindata.get('sex')
     if sinner_sex:
         sins_per_sex[sinner_sex] += 1
+
+    total_sins += 1
 
 def load_global_data():
     if not os.path.exists(SIN_FILENAME):
@@ -123,6 +162,36 @@ def load_global_data():
             except Exception, e:
                 print 'Error parsing sin data:', e
 
+def get_ticker_items():
+    result = []
+
+    total_in_neighborhoods = float(sum(sins_per_neighborhood.values()))
+    for neighborhood, count in sins_per_neighborhood.iteritems():
+        p = int(count / total_in_neighborhoods * 100)
+        if p == 0: continue
+        result.append('{}% of confessed sins were committed in {}'.format(p, neighborhood))
+
+    total_in_categories = float(sum(sins_per_category.values()))
+    for sin, count in sins_per_category.iteritems():
+        p = int(count / total_in_categories * 100)
+        if p == 0: continue
+        result.append('{}% of sins are related to {}'.format(p, string.capwords(sin)))
+
+    total_by_sex = float(sum(sins_per_sex.values()))
+    for sex, count in sins_per_sex.iteritems():
+        p = int(count / total_by_sex * 100)
+        if p == 0: continue
+        result.append('{}% of sins were committed by {}s'.format(p, sex))        
+
+    max_neighborhood = max(sins_per_neighborhood.iterkeys(), key=(lambda k: sins_per_neighborhood[k]))
+    max_category = max(sins_per_category.iterkeys(), key=(lambda k: sins_per_category[k]))
+    max_sin = max(sins_per_sin.iterkeys(), key=(lambda k: sins_per_sin[k]))
+
+    result.append('The neighborhood with the highest sin count is {}'.format(max_neighborhood))
+    result.append('The most confessed sin is {}'.format(string.capwords(max_sin)))
+
+    random.shuffle(result)
+    return result
 
 #------------------------------------------------------------------------------
 # flask app
@@ -216,24 +285,21 @@ def reportsin():
 @app.route('/results')
 def results():
     
-    result= {
-              "Parnassus Heights": {
-                "strokeColor": 'black',
+    ndata = {}
+
+    if total_sins > 0:
+        for neighborhood, count in sins_per_neighborhood.iteritems():
+            ndata[neighborhood] = {
+                "strokeColor": '#009ACD',
                 "strokeOpacity": 0.9,
                 "strokeWeight": 0.9,
-                "fillColor": 'red',
-                "fillOpacity": 0.1
-                },
-              "Apparel City": {"fillOpacity": 0.9,"fillColor": '#009ACD'},
-              "Anza Vista": {"fillOpacity": 0.9,"fillColor": '#009ACD'},
-              "Mission Dolores": {"fillOpacity": 0.4, "fillColor": 'blue'},
-              "Dogpatch": {"fillOpacity": 0.9,"fillColor": '#009ACD', "strokeColor": "black" }, 
-              "Potrero Hill": {"fillOpacity": 0.9,"fillColor": '#009ACD', "strokeColor": "black" }
+                "fillColor": '#4CB8DC',
+                "fillOpacity": float(count) / float(total_sins)
             }
-            # "Parnassus Heights": {"fillOpacity": 0.9,"fillColor": '#00FF00'}, 
-            # "Apparel City": {"fillOpacity": 0.9,"fillColor": '#00FF00'}
-            # }
-    return render_template('merge_style_hoods.html', data = result)
+
+    ticker = get_ticker_items()
+
+    return render_template('merge_style_hoods.html', data=ndata, ticker=ticker)
 
 
 @app.route('/test')
