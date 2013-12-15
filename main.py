@@ -143,16 +143,16 @@ sins_per_sex.update({
 })
 
 category_colors = {
-    'envy' : '#FF0000',
-    'gluttony' : '#00FF00',
-    'greed' : '#0000FF',
-    'lust' : '#FFFF00',
-    'pride' : '#00FFFF',
-    'sloth' : '#FF00FF',
-    'wrath' : '#ABABAB',
+    'envy' : '#00B8F5',
+    'gluttony' : '#00F5B8',
+    'greed' : '#33CCFF',
+    'lust' : '#FF9470',
+    'pride' : '#00B8F5',
+    'sloth' : '#00F5B8',
+    'wrath' : '#FF9470',
     'god' : '#2266FF',
     'violence' : '#FF0088',
-    'society' : '#DD2243',
+    'society' : '#FF9470',
 }
 
 pivoted_data = {
