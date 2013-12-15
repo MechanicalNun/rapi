@@ -103,6 +103,9 @@ categories = [
     'pride',
     'sloth',
     'wrath',
+    'god',
+    'violence',
+    'society',
 ]
 
 from collections import defaultdict
@@ -373,7 +376,8 @@ def get_ticker_items():
     max_sin = max(sins_per_sin.iterkeys(), key=(lambda k: sins_per_sin[k]))
 
     result.append('The neighborhood with the highest sin count is {}'.format(max_neighborhood))
-    result.append('The most confessed sin is {}'.format(string.capwords(max_sin)))
+    result.append('Most of the sins committed were related to {}'.format(string.capwords(max_category.encode('utf8'))))
+    result.append('The most confessed sin is {}'.format(string.capwords(max_sin.encode('utf8'))))
 
     random.shuffle(result)
     return result
