@@ -149,7 +149,10 @@ category_colors = {
     'lust' : '#FFFF00',
     'pride' : '#00FFFF',
     'sloth' : '#FF00FF',
-    'wrath' : '#ABABAB', 
+    'wrath' : '#ABABAB',
+    'god' : '#2266FF',
+    'violence' : '#FF0088',
+    'society' : '#DD2243',
 }
 
 pivoted_data = {
