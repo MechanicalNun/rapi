@@ -141,6 +141,16 @@ ul.newsticker li {
   margin-top: 18px;
 }
 
+#category {
+  position: fixed;
+  top: 0px;
+  left:20px;
+  background: {{category_color}};
+  padding: 30px;
+  font-size: 28pt;
+  font: bold 33px sans-serif;
+}
+
 /*ul.ticker {
     -webkit-transition: all 0s linear;
     -moz-transition: all 0s linear;
@@ -160,6 +170,8 @@ ul.ticker li {
   </head>
   <body>
     <div id="map-canvas"></div>
+
+    <div id="category">{{category}}</div>
 
     <div class="tickercontainer">
         <ul class="ticker">

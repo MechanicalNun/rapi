@@ -95,11 +95,22 @@ def hsv2rgb(h, s, v):
 
 SIN_FILENAME = 'sins.json'
 
+categories = [
+    'envy',
+    'gluttony',
+    'greed',
+    'lust',
+    'pride',
+    'sloth',
+    'wrath',
+]
+
 from collections import defaultdict
 sins_per_neighborhood = defaultdict(int)
 sins_per_category = defaultdict(int)
 sins_per_sin = defaultdict(int)
 sins_per_sex = defaultdict(int)
+sins_per_category_per_neighborhood = {category : defaultdict(int) for category in categories}
 total_sins = 0
 
 sins_per_neighborhood.update({
@@ -128,6 +139,177 @@ sins_per_sex.update({
     'male' : 280,
 })
 
+category_colors = {
+    'envy' : '#FF0000',
+    'gluttony' : '#00FF00',
+    'greed' : '#0000FF',
+    'lust' : '#FFFF00',
+    'pride' : '#00FFFF',
+    'sloth' : '#FF00FF',
+    'wrath' : '#ABABAB', 
+}
+
+pivoted_data = {
+    'gluttony': {
+        'Bayview Park': 0,
+        'Cole Valley': 4,
+        'Excelsior': 14,
+        'Financial District': 5,
+        'Haight-Ashbury': 0,
+        'Hayes Valley': 12,
+        'Inner Richmond': 7,
+        'Lower Haight': 5,
+        'Lower Pacific Heights': 2,
+        'Marina': 0,
+        'Mission Bay': 3,
+        'Mission District': 19,
+        'Mission Dolores': 0,
+        'Nob Hill': 0,
+        'North Beach': 14,
+        'Portrero Hill': 5,
+        'The Castro/Upper Market': 9,
+        'The Mission': 15,
+        'Twin Peaks': 10,
+        'Union Square': 0
+    },
+    'envy': {
+        'Bayview Park': 0,
+        'Cole Valley': 0,
+        'Excelsior': 12,
+        'Financial District': 1,
+        'Haight-Ashbury': 0,
+        'Hayes Valley': 10,
+        'Inner Richmond': 4,
+        'Lower Haight': 0,
+        'Lower Pacific Heights': 0,
+        'Marina': 0,
+        'Mission Bay': 0,
+        'Mission District': 12,
+        'Mission Dolores': 5,
+        'Nob Hill': 0,
+        'North Beach': 12,
+        'Portrero Hill': 3,
+        'The Castro/Upper Market': 11,
+        'The Mission': 11,
+        'Twin Peaks': 6,
+        'Union Square': 0
+    },
+    'greed': {
+        'Bayview Park': 0,
+        'Cole Valley': 0,
+        'Excelsior': 6,
+        'Financial District': 0,
+        'Haight-Ashbury': 1,
+        'Hayes Valley': 2,
+        'Inner Richmond': 0,
+        'Lower Haight': 0,
+        'Lower Pacific Heights': 1,
+        'Marina': 0,
+        'Mission Bay': 0,
+        'Mission District': 1,
+        'Mission Dolores': 0,
+        'Nob Hill': 0,
+        'North Beach': 6,
+        'Portrero Hill': 3,
+        'The Castro/Upper Market': 1,
+        'The Mission': 5,
+        'Twin Peaks': 4,
+        'Union Square': 0
+    },
+    'lust': {
+        'Bayview Park': 1,
+        'Cole Valley': 0,
+        'Excelsior': 11,
+        'Financial District': 0,
+        'Haight-Ashbury': 0,
+        'Hayes Valley': 16,
+        'Inner Richmond': 0,
+        'Lower Haight': 0,
+        'Lower Pacific Heights': 0,
+        'Marina': 0,
+        'Mission Bay': 6,
+        'Mission District': 47,
+        'Mission Dolores': 0,
+        'Nob Hill': 0,
+        'North Beach': 12,
+        'Portrero Hill': 6,
+        'The Castro/Upper Market': 8,
+        'The Mission': 20,
+        'Twin Peaks': 8,
+        'Union Square': 17
+    },
+    'pride': {
+        'Bayview Park': 0,
+        'Cole Valley': 0,
+        'Excelsior': 26,
+        'Financial District': 4,
+        'Haight-Ashbury': 9,
+        'Hayes Valley': 14,
+        'Inner Richmond': 0,
+        'Lower Haight': 0,
+        'Lower Pacific Heights': 1,
+        'Marina': 0,
+        'Mission Bay': 0,
+        'Mission District': 17,
+        'Mission Dolores': 0,
+        'Nob Hill': 4,
+        'North Beach': 15,
+        'Portrero Hill': 9,
+        'The Castro/Upper Market': 12,
+        'The Mission': 15,
+        'Twin Peaks': 5,
+        'Union Square': 0
+    },
+    'sloth': {
+        'Bayview Park': 0,
+        'Cole Valley': 0,
+        'Excelsior': 20,
+        'Financial District': 9,
+        'Haight-Ashbury': 1,
+        'Hayes Valley': 5,
+        'Inner Richmond': 4,
+        'Lower Haight': 3,
+        'Lower Pacific Heights': 1,
+        'Marina': 0,
+        'Mission Bay': 7,
+        'Mission District': 20,
+        'Mission Dolores': 4,
+        'Nob Hill': 7,
+        'North Beach': 11,
+        'Portrero Hill': 3,
+        'The Castro/Upper Market': 14,
+        'The Mission': 9,
+        'Twin Peaks': 9,
+        'Union Square': 0
+    },
+    'wrath': {
+        'Bayview Park': 0,
+        'Cole Valley': 0,
+        'Excelsior': 19,
+        'Financial District': 0,
+        'Haight-Ashbury': 4,
+        'Hayes Valley': 9,
+        'Inner Richmond': 8,
+        'Lower Haight': 0,
+        'Lower Pacific Heights': 14,
+        'Marina': 3,
+        'Mission Bay': 0,
+        'Mission District': 42,
+        'Mission Dolores': 13,
+        'Nob Hill': 3,
+        'North Beach': 23,
+        'Portrero Hill': 5,
+        'The Castro/Upper Market': 0,
+        'The Mission': 24,
+        'Twin Peaks': 18,
+        'Union Square': 0
+    }
+}
+
+for category, data in pivoted_data.iteritems():
+    sins_per_category_per_neighborhood[category].update(data)
+
+
 def add_sin_to_global_data(sindata):
 
     global total_sins
@@ -147,6 +329,9 @@ def add_sin_to_global_data(sindata):
     sinner_sex = sindata.get('sex')
     if sinner_sex:
         sins_per_sex[sinner_sex] += 1
+
+    if neighborhood and sin_category:
+        sins_per_category_per_neighborhood[sin_category][neighborhood] += 1
 
     total_sins += 1
 
@@ -287,19 +472,29 @@ def results():
     
     ndata = {}
 
-    if total_sins > 0:
-        for neighborhood, count in sins_per_neighborhood.iteritems():
-            ndata[neighborhood] = {
-                "strokeColor": '#009ACD',
-                "strokeOpacity": 0.9,
-                "strokeWeight": 0.9,
-                "fillColor": '#4CB8DC',
-                "fillOpacity": float(count) / float(total_sins)
-            }
+
+    category, category_neighborhoods = random.choice(sins_per_category_per_neighborhood.items())
+    category_color = category_colors[category]
+
+    for neighborhood, count in category_neighborhoods.iteritems():
+        ndata[neighborhood] = {
+            "strokeColor": '#009ACD',
+            "strokeOpacity": 0.9,
+            "strokeWeight": 0.9,
+            "fillColor": category_color, #'#4CB8DC',
+            "fillOpacity": float(count) / float(sins_per_category[category])
+        }
 
     ticker = get_ticker_items()
 
-    return render_template('merge_style_hoods.html', data=ndata, ticker=ticker)
+    context = {
+        'data' : ndata,
+        'ticker' : ticker,
+        'category' : category.capitalize(),
+        'category_color' : category_color,
+    }
+
+    return render_template('merge_style_hoods.html', **context)
 
 
 @app.route('/test')
@@ -309,4 +504,4 @@ def test():
 
 if __name__ == '__main__':
     load_global_data()
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host='0.0.0.0', port=5000, debug=True)
