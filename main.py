@@ -377,7 +377,7 @@ def get_ticker_items():
 
     result.append('The neighborhood with the highest sin count is {}'.format(max_neighborhood))
     result.append('Most of the sins committed were related to {}'.format(string.capwords(max_category.encode('utf8'))))
-    result.append('The most confessed sin is {}'.format(string.capwords(max_sin.encode('utf8'))))
+    #result.append('The most confessed sin is {}'.format(string.capwords(max_sin.encode('utf8'))))
 
     random.shuffle(result)
     return result
