@@ -145,12 +145,12 @@ sins_per_sex.update({
 category_colors = {
     'envy' : '#00B8F5',
     'gluttony' : '#00F5B8',
-    'greed' : '#33CCFF',
+    'greed' : '#00F5B8',
     'lust' : '#FF9470',
     'pride' : '#00B8F5',
-    'sloth' : '#00F5B8',
+    'sloth' : '#33CCFF',
     'wrath' : '#FF9470',
-    'god' : '#2266FF',
+    'god' : '#FF0088',
     'violence' : '#FF0088',
     'society' : '#FF9470',
 }
