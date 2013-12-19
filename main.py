@@ -474,6 +474,25 @@ def reportsin():
     
     return ''    
 
+@app.route('/data')
+def data():
+    ndata = {}
+
+
+    category, category_neighborhoods = random.choice(sins_per_category_per_neighborhood.items())
+    category_color = category_colors[category]
+
+    for neighborhood, count in category_neighborhoods.iteritems():
+        ndata[neighborhood] = {
+            "strokeColor": '#009ACD',
+            "strokeOpacity": 0.9,
+            "strokeWeight": 0.9,
+            "fillColor": category_color, #'#4CB8DC',
+            "fillOpacity": float(count) / float(sins_per_category[category])
+        }
+        return ndata
+
+
 @app.route('/results')
 def results():
     
@@ -511,4 +530,4 @@ def test():
 
 if __name__ == '__main__':
     load_global_data()
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)
