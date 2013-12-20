@@ -476,6 +476,7 @@ def reportsin():
 
 @app.route('/data')
 def data():
+    print 'Data'
     ndata = {}
 
 
