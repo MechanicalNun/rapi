@@ -491,7 +491,7 @@ def data():
             "fillColor": category_color, #'#4CB8DC',
             "fillOpacity": float(count) / float(sins_per_category[category])
         }
-        return ndata
+        return **ndata
 
 
 @app.route('/results')
