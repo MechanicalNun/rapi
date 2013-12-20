@@ -529,6 +529,11 @@ def test():
     print 'Inside test'
     return 'Test'
 
+@app.route('/test2')
+def test2():
+    print 'Inside test2'
+    return 'Test2'    
+
 if __name__ == '__main__':
     load_global_data()
     app.run(host='0.0.0.0', port=5000, debug=False)
